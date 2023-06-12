@@ -8,8 +8,9 @@ from setting import mwidth, mheight, get_screen_num
 
 
 class ScreenCapture(QWidget):
-    def __init__(self):
+    def __init__(self,menu_bar):
         super().__init__()
+        self.menu_bar = menu_bar
         self.initUI()
 
     def initUI(self):
@@ -40,7 +41,7 @@ class ScreenCapture(QWidget):
         screen = QGuiApplication.screens()[get_screen_num()]
         screen_pixmap = screen.grabWindow(0)
         self.label.setGeometry(0, 0, QGuiApplication.topLevelWindows()[0].geometry().width(),
-                               QGuiApplication.topLevelWindows()[0].geometry().height())
+                               QGuiApplication.topLevelWindows()[0].geometry().height()-self.menu_bar.height())
         # self.label.setPixmap(screen_pixmap.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.label.setPixmap(screen_pixmap.scaled(self.label.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
 
@@ -61,7 +62,7 @@ class ScreenCapture(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Menu()
-    screen_capture = ScreenCapture()
+    screen_capture = ScreenCapture(window.menuBar())
     window.setCentralWidget(screen_capture)
 
     window.show()
