@@ -39,13 +39,16 @@ class ScreenCapture(QWidget):
         # capture the screen and display it on the label
         screen = QGuiApplication.screens()[get_screen_num()]
         screen_pixmap = screen.grabWindow(0)
+        self.label.setGeometry(0, 0, QGuiApplication.topLevelWindows()[0].geometry().width(),
+                               QGuiApplication.topLevelWindows()[0].geometry().height())
         self.label.setPixmap(screen_pixmap.scaled(self.label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
 
         # get the current mouse position relative to the widget and update the QPoint attribute
         mouse_pos = QCursor.pos()
         geometry = screen.geometry()
-        self.cursor_label.move(int((mouse_pos.x() - geometry.x()) / geometry.width() * mwidth),
-                               int((mouse_pos.y() - geometry.y()) / geometry.height() * mheight))
+        self.cursor_label.move(
+            int((mouse_pos.x() - geometry.x()) / geometry.width() * QGuiApplication.topLevelWindows()[0].geometry().width()),
+            int((mouse_pos.y() - geometry.y()) / geometry.height() * QGuiApplication.topLevelWindows()[0].geometry().height()))
         self.update()
 
     def keyPressEvent(self, event):
